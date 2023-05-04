@@ -1,0 +1,28 @@
+#include <vector>
+
+int maximalNetworkRank(int n, std::vector<std::vector<int>>& cables) {
+    std::vector<int> degree(n, 0);
+    std::vector<std::vector<bool>> connected(n, std::vector<bool>(n, false));
+
+    for (const auto& cable : cables) {
+        int a = cable[0];
+        int b = cable[1];
+        degree[a]++;
+        degree[b]++;
+        connected[a][b] = true;
+        connected[b][a] = true;
+    }
+
+    int maxRank = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            int rank = degree[i] + degree[j];
+            if (connected[i][j]) {
+                rank--;
+            }
+            maxRank = std::max(maxRank, rank);
+        }
+    }
+
+    return maxRank;
+}
